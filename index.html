@@ -27,6 +27,7 @@
         .close { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
         .btn-google { background: #fff; color: #000; border: none; padding: 10px; width: 100%; font-family: sans-serif; font-weight: bold; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
         .btn-google:hover { background: #e6e6e6; }
+        .online-counter { font-size: 0.9rem; color: #fff; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -39,7 +40,6 @@
             <div class="nav-item">💬 Форум</div>
         </div>
         <div class="auth" id="auth-zone">
-            <!-- Кнопки входа изменятся после логина -->
             <button class="btn" onclick="openModal(true,'🔑 Вход через Google')">Войти</button>
             <button class="btn" onclick="openModal(true,'🔐 Регистрация')">Регистрация</button>
         </div>
@@ -60,6 +60,8 @@
         </section>
 
         <aside>
+            <!-- Наш живой счетчик онлайна из Firebase -->
+            <div class="online-counter">Платформа онлайн: <span id="api-online" style="color:#0ed145; font-weight:bold;">0</span></div>
             <p>Список друзей</p>
             <div style="margin-top:40px; font-size:1.4rem;">✳️ ТУТ СПИСОК ДРУЗЕЙ ✳️</div>
         </aside>
@@ -71,7 +73,6 @@
             <h3 id="m-title">Вход</h3>
             <p style="font-size:0.85rem; color:#8b949e;">Быстрый доступ к платформе FeniBlox</p>
             
-            <!-- Кнопка авторизации через Google -->
             <button class="btn-google" onclick="loginWithGoogle()">
                 <img src="https://icons8.com" alt="G"> 
                 Войти через Google
@@ -80,6 +81,9 @@
     </div>
 
     <script>
+        // Твоя реальная ссылка на Firebase
+        const FIREBASE_URL = "https://firebaseio.com";
+
         const games = [
             { title: "Битва Арена 3D", icon: "⚔️" }, { title: "Лаки Блок Гонки", icon: "❓" },
             { title: "Отель DOORS", icon: "🚪" }, { title: "Рейд на Феникса", icon: "🔥" }
@@ -90,21 +94,64 @@
             document.getElementById('myModal').style.display = show ? 'flex' : 'none';
         }
 
-        // Функция симуляции Google API
+        // 🟢 ФУНКЦИЯ ПОЛУЧЕНИЯ ТЕКУЩЕГО ОНЛАЙНА ИЗ БАЗЫ
+        function updateOnlineStatus() {
+            fetch(`${FIREBASE_URL}current_online.json`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data !== null) {
+                        document.getElementById('api-online').innerText = data;
+                    }
+                })
+                .catch(err => console.error("Ошибка API онлайна:", err));
+        }
+
+        // 🟢 НАСТОЯЩАЯ СВЯЗЬ С СЕРВЕРОМ FIREBASE ПРИ ВХОДЕ
         function loginWithGoogle() {
             openModal(false);
-            alert("FeniBlox API: Подключение к серверам Google...");
             
-            // После успешного ответа Google API переключаем шапку на твой админский профиль
-            const auth = document.getElementById('auth-zone');
-            auth.innerHTML = `
-                <div style="text-align:right; font-size:0.9rem;">
-                    <div style="color:#fff;">✳️ FeniBlox ✳️</div>
-                    <div style="color:#0ed145;">✳️ 100 LVL ✳️</div>
-                </div>
-                <img class="avatar" src="https://icons8.com">
-            `;
-            alert("Добро пожаловать, FeniBlox! Вы успешно вошли через Google.");
+            // 1. Отправляем запрос в твою базу данных, чтобы создать/обновить профиль FeniBlox
+            const playerData = {
+                FeniCoins: 100,
+                level: 100
+            };
+
+            // PUT запрос записывает данные в папку players/FeniBlox
+            fetch(`${FIREBASE_URL}players/FeniBlox.json`, {
+                method: 'PUT',
+                body: JSON.stringify(playerData)
+            })
+            .then(res => res.json())
+            .then(user => {
+                // 2. Получаем текущий онлайн, прибавляем 1 и отправляем обратно в Firebase
+                return fetch(`${FIREBASE_URL}current_online.json`);
+            })
+            .then(res => res.json())
+            .then(currentOnline => {
+                let newOnline = (currentOnline || 0) + 1;
+                return fetch(`${FIREBASE_URL}current_online.json`, {
+                    method: 'PUT',
+                    body: JSON.stringify(newOnline)
+                });
+            })
+            .then(() => {
+                // 3. Обновляем интерфейс сайта данными из базы
+                const auth = document.getElementById('auth-zone');
+                auth.innerHTML = `
+                    <div style="text-align:right; font-size:0.9rem;">
+                        <div style="color:#fff;">✳️ FeniBlox ✳️</div>
+                        <div style="color:#0ed145;">✳️ 100 LVL ✳️</div>
+                    </div>
+                    <img class="avatar" src="https://icons8.com">
+                `;
+                // Сразу обновляем счетчик онлайна на экране
+                updateOnlineStatus();
+                alert("Успешное подключение! Данные синхронизированы с Firebase Google.");
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Ошибка подключения к Firebase API!");
+            });
         }
 
         function buildGames(id) {
@@ -122,6 +169,10 @@
             buildGames('row-rec'); 
             buildGames('row-cont'); 
             buildGames('row-fav');
+            
+            // Каждые 5 секунд сайт будет автоматически обновлять онлайн, запрашивая инфу из базы
+            updateOnlineStatus();
+            setInterval(updateOnlineStatus, 5000);
         }
     </script>
 </body>
