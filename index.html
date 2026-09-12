@@ -3,353 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FeniBlox — Главная</title>
+    <title>FeniBlox</title>
     <style>
-        /* БАЗОВЫЙ СТИЛЬ */
-        body {
-            background-color: #1a1b1e;
-            color: #0ed145;
-            font-family: 'Segoe Script', 'Comic Sans MS', cursive, sans-serif;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
-
-        /* ТЕСТОВАЯ ПАНЕЛЬ РЕЖИМОВ */
-        .test-switcher {
-            position: fixed;
-            bottom: 20px; left: 20px;
-            background: #2a2b30; padding: 10px;
-            border: 2px solid #0ed145; border-radius: 5px;
-            z-index: 9999; color: #fff; font-family: sans-serif; font-size: 12px;
-        }
-        .test-switcher button {
-            background: #0ed145; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold;
-            font-family: 'Segoe Script', cursive; color: #1a1b1e; border-radius: 3px; margin-left: 5px;
-        }
-
-        /* ХЕДЕР */
-        header {
-            background-color: #111215;
-            border-bottom: 2px solid #2d2e33;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            padding: 0 20px;
-        }
-        .nav-links { display: flex; height: 100%; align-items: center; }
-        .logo { font-size: 1.6rem; font-weight: bold; margin-right: 30px; cursor: pointer; }
-        .nav-item {
-            padding: 0 20px; height: 100%; display: flex; align-items: center;
-            border-right: 1px solid #2d2e33; cursor: pointer; text-decoration: none;
-            color: #0ed145; font-size: 1.2rem;
-        }
-        .nav-item:hover { background-color: #222429; }
-
-        /* ПРОФИЛЬ / АВТОРИЗАЦИЯ */
-        .auth-panel { display: flex; align-items: center; gap: 12px; height: 100%; }
-        .btn-auth {
-            background: transparent; border: 2px solid #0ed145; color: #0ed145;
-            font-family: 'Segoe Script', cursive; padding: 5px 15px; border-radius: 5px;
-            cursor: pointer; font-size: 1rem; transition: 0.2s;
-        }
-        .btn-auth:hover { background: #0ed145; color: #1a1b1e; }
-        
-        .user-profile-box { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; text-align: right; }
-        .user-avatar-img { width: 44px; height: 44px; border: 2px solid #0ed145; border-radius: 5px; background: #111215; cursor: pointer; }
-
-        /* МАКЕТ СТРАНИЦЫ */
-        .main-layout { display: flex; min-height: calc(100vh - 62px); }
-        .content-view { flex: 1; padding: 20px; box-sizing: border-box; }
-        
-        /* ПОИСК */
-        .search-container { margin-bottom: 25px; }
-        .search-bar {
-            width: 100%; max-width: 700px; background-color: #222429; border: 2px solid #3a3c43;
-            padding: 10px; color: #0ed145; font-family: 'Segoe Script', cursive; font-size: 0.9rem; outline: none;
-        }
-
-        /* КАТЕГОРИИ */
-        .category-title { font-size: 1.3rem; margin: 20px 0 10px 0; display: flex; align-items: center; gap: 10px; }
-        .games-row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
-        
-        .game-slot {
-            width: 110px; height: 110px; border: 2px solid #0ed145; border-radius: 12px;
-            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center;
-        }
-        .game-slot:hover {
-            transform: scale(1.05); background-color: rgba(14, 209, 69, 0.1); box-shadow: 0 0 10px rgba(14, 209, 69, 0.3);
-        }
-
-        /* БОКОВАЯ ПАНЕЛЬ */
-        aside { width: 250px; border-left: 2px solid #2d2e33; background-color: #141518; padding: 20px; box-sizing: border-box; }
-        .aside-title { font-size: 1.1rem; border-bottom: 1px solid #2d2e33; padding-bottom: 10px; text-align: center; margin-top: 0; }
-        .friends-placeholder { margin-top: 40px; font-size: 1.4rem; text-align: center; line-height: 1.6; }
-
-        /* ВСПЛЫВАЮЩЕЕ ОКНО РЕГИСТРАЦИИ (МОДАЛКА) */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-window {
-            background-color: #111215; border: 2px solid #0ed145; border-radius: 15px;
-            width: 400px; padding: 30px; text-align: center; box-shadow: 0 0 25px rgba(14, 209, 69, 0.4);
-            position: relative;
-        }
-        .modal-close {
-            position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; color: #8b949e;
-        }
-        .modal-close:hover { color: #fff; }
-        .modal-window h3 { margin-top: 0; font-size: 1.6rem; color: #fff; }
-        .modal-input {
-            width: 90%; background: #222429; border: 2px solid #3a3c43; padding: 10px;
-            color: #fff; font-family: 'Segoe Script', cursive; font-size: 1rem; margin-bottom: 15px; outline: none;
-        }
-        .modal-input:focus { border-color: #0ed145; }
-
-        /* ДИНАМИЧЕСКИЕ СТРАНИЦЫ */
-        .page { display: none; }
-        .page.active { display: block; }
+        body { background: #1a1b1e; color: #0ed145; font-family: 'Segoe Script', cursive, sans-serif; margin: 0; user-select: none; }
+        .switcher { position: fixed; bottom: 20px; left: 20px; background: #2a2b30; padding: 10px; border: 2px solid #0ed145; border-radius: 5px; z-index: 1000; }
+        .switcher button { background: #0ed145; border: none; padding: 5px 10px; cursor: pointer; font-family: 'Segoe Script'; font-weight: bold; }
+        header { background: #111215; border-bottom: 2px solid #2d2e33; display: flex; justify-content: space-between; align-items: center; height: 60px; padding: 0 20px; }
+        .nav { display: flex; align-items: center; gap: 20px; }
+        .logo { font-size: 1.6rem; font-weight: bold; }
+        .nav-item { cursor: pointer; font-size: 1.2rem; }
+        .auth { display: flex; align-items: center; gap: 12px; }
+        .btn { background: transparent; border: 2px solid #0ed145; color: #0ed145; font-family: 'Segoe Script'; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+        .btn:hover { background: #0ed145; color: #1a1b1e; }
+        .avatar { width: 44px; height: 44px; border: 2px solid #0ed145; border-radius: 5px; }
+        .main { display: flex; min-height: calc(100vh - 62px); }
+        .content { flex: 1; padding: 20px; }
+        .search { width: 100%; max-width: 700px; background: #222429; border: 2px solid #3a3c43; padding: 10px; color: #0ed145; font-family: 'Segoe Script'; margin-bottom: 25px; }
+        .title { font-size: 1.3rem; margin: 20px 0 10px 0; }
+        .row { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
+        .slot { width: 110px; height: 110px; border: 2px solid #0ed145; border-radius: 12px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 0.65rem; text-align: center; }
+        .slot:hover { transform: scale(1.05); background: rgba(14, 209, 69, 0.1); }
+        aside { width: 250px; border-left: 2px solid #2d2e33; background: #141518; padding: 20px; text-align: center; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 2000; }
+        .win { background: #111215; border: 2px solid #0ed145; border-radius: 15px; width: 350px; padding: 30px; text-align: center; position: relative; }
+        .close { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
+        .input { width: 90%; background: #222429; border: 2px solid #3a3c43; padding: 10px; color: #fff; font-family: 'Segoe Script'; margin-bottom: 15px; outline: none; }
         .hidden { display: none !important; }
-        .btn-back {
-            background: transparent; border: 2px solid #0ed145; color: #0ed145;
-            padding: 5px 15px; border-radius: 5px; cursor: pointer; font-family: 'Segoe Script', cursive; margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- ТЕСТОВАЯ ПАНЕЛЬ -->
-    <div class="test-switcher">
-        Режим: 
-        <button onclick="changeAuthMode('guest')">Гость</button> 
-        <button onclick="changeAuthMode('user')">Вошёл</button>
+    <div class="switcher">
+        Режим: <button onclick="setMode('guest')">Гость</button> <button onclick="setMode('user')">Вошёл</button>
     </div>
 
-    <!-- ШАПКА -->
     <header>
-        <div class="nav-links">
-            <div class="logo" onclick="navigateTo('/')">FeniBlox</div>
-            <div class="nav-item" onclick="navigateTo('/game')">🎮 Игры</div>
-            <div class="nav-item" onclick="navigateTo('/friends')">👥 Друзья</div>
-            <div class="nav-item" onclick="navigateTo('/forum')">💬 Форум</div>
+        <div class="nav">
+            <div class="logo">FeniBlox</div>
+            <div class="nav-item">🎮 Игры</div>
+            <div class="nav-item" id="menu-friends">👥 Друзья</div>
+            <div class="nav-item">💬 Форум</div>
         </div>
-        <div class="auth-panel" id="auth-zone">
-            <!-- Сюда вставляется профиль -->
-        </div>
+        <div class="auth" id="auth-zone"></div>
     </header>
 
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
-    <main class="main-layout">
-        <section class="content-view">
+    <main class="main">
+        <section class="content">
+            <input type="text" class="search" placeholder="Нажмите сюда чтобы начать поиск игр..." readonly>
             
-            <!-- ГЛАВНАЯ СТРАНИЦА -->
-            <div id="page-home" class="page active">
-                <div class="search-container">
-                    <input type="text" class="search-bar" placeholder="Нажмите сюда чтобы начать поиск игр..." readonly>
-                </div>
-                <div class="category-title">⭐ Рекомендации</div>
-                <div class="games-row" id="row-recommendations"></div>
-                <div id="block-continue">
-                    <div class="category-title">🎮 ...Продолжить играть</div>
-                    <div class="games-row" id="row-continue"></div>
-                </div>
-                <div id="block-favorites">
-                    <div class="category-title">❤️ Избранные игры</div>
-                    <div class="games-row" id="row-favorites"></div>
-                </div>
+            <div class="title">⭐ Рекомендации</div>
+            <div class="row" id="row-rec"></div>
+
+            <div id="box-continue">
+                <div class="title">🎮 Продолжить играть</div>
+                <div class="row" id="row-cont"></div>
             </div>
 
-            <!-- СТРАНИЦА ДРУЗЕЙ -->
-            <div id="page-friends" class="page">
-                <button class="btn-back" onclick="navigateTo('/')">← На главную</button>
-                <h2>👥 Ваши друзья</h2>
-                <p>Здесь будет отображаться список твоих друзей, когда они зарегистрируются!</p>
+            <div id="box-fav">
+                <div class="title">❤️ Избранные игры</div>
+                <div class="row" id="row-fav"></div>
             </div>
-
-            <!-- СТРАНИЦА ФОРУМА -->
-            <div id="page-forum" class="page">
-                <button class="btn-back" onclick="navigateTo('/')">← На главную</button>
-                <h2>💬 Форум FeniBlox</h2>
-                <p>Добро пожаловать на форум! Обсуждай обновления и предлагай идеи.</p>
-            </div>
-
-            <!-- СТРАНИЦА ЗАПУСКА ИГРЫ -->
-            <div id="page-game-single" class="page">
-                <button class="btn-back" onclick="navigateTo('/game')">← Все игры</button>
-                <h2 id="single-game-title">Название игры</h2>
-                <div style="width: 100%; max-width: 600px; height: 350px; border: 2px solid #0ed145; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 10px; background: #111215; gap: 20px;">
-                    <div id="single-game-icon" style="font-size: 4rem;">🎮</div>
-                    <button class="btn-auth" style="font-size: 1.5rem; padding: 10px 30px;" onclick="alert('Запуск игры... Скоро!')">ИГРАТЬ 🎮</button>
-                </div>
-            </div>
-
-            <!-- СТРАНИЦА ПРОФИЛЯ -->
-            <div id="page-user-profile" class="page">
-                <button class="btn-back" onclick="navigateTo('/')">← На главную</button>
-                <h2>👤 Профиль игрока: <span id="profile-username" style="color: #fff;">username</span></h2>
-                <div style="border: 2px solid #0ed145; padding: 20px; display: inline-block; border-radius: 8px; background: #111215;">
-                    <p>Статус: <span style="color: #0ed145;">Разработчик Платформы</span></p>
-                    <p>Уровень: 100 LVL ✳️</p>
-                    <p>Баланс: 100 FeniCoins 🪙</p>
-                </div>
-            </div>
-
         </section>
 
-        <!-- БОКОВАЯ ПАНЕЛЬ ДРУЗЕЙ -->
-        <aside id="sidebar-friends">
-            <p class="aside-title">Список друзей</p>
-            <div class="friends-placeholder">✳️ ТУТ СПИСОК ДРУЗЕЙ ✳️</div>
+        <aside id="sidebar">
+            <p>Список друзей</p>
+            <div style="margin-top:40px; font-size:1.4rem;">✳️ ТУТ СПИСОК ДРУЗЕЙ ✳️</div>
         </aside>
     </main>
 
-    <!-- ВСПЛЫВАЮЩЕЕ НЕОНОВОЕ ОКНО (МОДАЛКА) -->
-    <div class="modal-overlay" id="authModal" onclick="closeAuthModal(event)">
-        <div class="modal-window">
-            <span class="modal-close" onclick="toggleModal(false)">&times;</span>
-            <h3 id="modal-title">🔐 Регистрация</h3>
-        let currentMode = 'user';
+    <div class="modal" id="myModal" onclick="if(event.target==this)openModal(false)">
+        <div class="win">
+            <span class="close" onclick="openModal(false)">&times;</span>
+            <h3 id="m-title">Вход</h3>
+            <input type="text" class="input" placeholder="Ваш ник...">
+            <input type="password" class="input" placeholder="Пароль...">
+            <button class="btn" style="width:100%" onclick="openModal(false)">Готово</button>
+        </div>
+    </div>
 
-        // Роутер
-        function navigateTo(urlPath) {
-            window.history.pushState({}, "", urlPath);
-            renderPage(urlPath);
+    <script>
+        const games = [
+            { title: "Битва Арена 3D", icon: "⚔️" }, { title: "Лаки Блок Гонки", icon: "❓" },
+            { title: "Отель DOORS", icon: "🚪" }, { title: "Рейд на Феникса", icon: "🔥" }
+        ];
+
+        function openModal(show, title = '🔐 Вход') {
+            document.getElementById('m-title').innerText = title;
+            document.getElementById('myModal').style.display = show ? 'flex' : 'none';
         }
 
-        function renderPage(urlPath) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-
-            if (urlPath === '/friends') {
-                if (currentMode === 'guest') {
-                    // Если гость нажал Друзья — открываем всплывающее окно регистрации и оставляем на главной
-                    window.history.pushState({}, "", '/');
-                    toggleModal(true, '🔐 Регистрация');
-                    document.getElementById('page-home').classList.add('active');
-                    return;
-                } else {
-                    document.getElementById('page-friends').classList.add('active');
-                    return;
-                }
-            }
-
-            if (urlPath === '/' || urlPath === '/game') {
-                document.getElementById('page-home').classList.add('active');
-            } else if (urlPath === '/forum') {
-                document.getElementById('page-forum').classList.add('active');
-            } 
-            else if (urlPath.startsWith('/game/')) {
-                const gameId = urlPath.replace('/game/', '');
-                // Подтягиваем инфу об игре
-                const gamesData = {
-                    battle_arena_3d: { title: "Битва Арена 3D", icon: "⚔️" },
-                    lucky_block_race: { title: "Лаки Блок Гонки", icon: "❓" },
-                    escape_doors: { title: "Отель DOORS", icon: "🚪" },
-                    phoenix_boss_raid: { title: "Рейд на Феникса", icon: "🔥" }
-                };
-                const game = gamesData[gameId] || { title: "Чужая игра", icon: "🎮" };
-                document.getElementById('single-game-title').innerText = "🎮 Игра: " + game.title;
-                document.getElementById('single-game-icon').innerText = game.icon;
-                document.getElementById('page-game-single').classList.add('active');
-            } 
-            else if (urlPath.startsWith('/user/')) {
-                const username = urlPath.replace('/user/', '');
-                document.getElementById('profile-username').innerText = username;
-                document.getElementById('page-user-profile').classList.add('active');
-            } else {
-                document.getElementById('page-home').classList.add('active');
-            }
-        }
-
-        // Включение/выключение всплывающего окна
-        function toggleModal(show, title = '🔐 Вход в аккаунт') {
-            const modal = document.getElementById('authModal');
-            document.getElementById('modal-title').innerText = title;
-            modal.style.display = show ? 'flex' : 'none';
-        }
-
-        function closeAuthModal(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                toggleModal(false);
-            }
-        }
-
-        // Изменение авторизации
-        function changeAuthMode(mode) {
-            currentMode = mode;
-            const authZone = document.getElementById('auth-zone');
-            const sidebarFriends = document.getElementById('sidebar-friends');
-            const blockContinue = document.getElementById('block-continue');
-            const blockFavorites = document.getElementById('block-favorites');
+        function setMode(mode) {
+            const auth = document.getElementById('auth-zone');
+            const sidebar = document.getElementById('sidebar');
+            const menuFriends = document.getElementById('menu-friends');
+            const boxCont = document.getElementById('box-continue');
+            const boxFav = document.getElementById('box-favorites');
 
             if (mode === 'guest') {
-                authZone.innerHTML = `
-                    <button class="btn-auth" onclick="toggleModal(true, '🔑 Вход в FeniBlox')">Войти</button> 
-                    <button class="btn-auth" onclick="toggleModal(true, '🔐 Регистрация')">Регистрация</button>
-                `;
-                sidebarFriends.classList.add('hidden');
-                blockContinue.classList.add('hidden');
-                blockFavorites.classList.add('hidden');
-                generateFeniGames('row-recommendations', true);
+                auth.innerHTML = `<button class="btn" onclick="openModal(true,'🔑 Вход')">Войти</button>
+                                  <button class="btn" onclick="openModal(true,'🔐 Регистрация')">Регистрация</button>`;
+                sidebar.classList.add('hidden');
+                menuFriends.onclick = () => openModal(true, '🔐 Регистрация');
+                if(boxCont) boxCont.classList.add('hidden');
+                if(boxFav) boxFav.classList.add('hidden');
+                buildGames('row-rec', true);
             } else {
-                authZone.innerHTML = `
-                    <div class="user-profile-box" onclick="navigateTo('/user/FeniBlox')">
-                        <div style="color: #666; font-size: 0.8rem;">[Создатель]</div>
-                        <div style="color: #fff;">✳️ FeniBlox ✳️</div>
-                        <div style="color: #0ed145;">✳️ 100 LVL ✳️</div>
-                    </div>
-                    <img class="user-avatar-img" src="https://icons8.com" alt="Ава" onclick="navigateTo('/user/FeniBlox')">
-                `;
-                sidebarFriends.classList.remove('hidden');
-                blockContinue.classList.remove('hidden');
-                blockFavorites.classList.remove('hidden');
-                
-                generateFeniGames('row-recommendations', false);
-                generateFeniGames('row-continue', false);
-                generateFeniGames('row-favorites', false);
+                auth.innerHTML = `<div style="text-align:right; font-size:0.9rem;">
+                                    <div style="color:#fff;">✳️ FeniBlox ✳️</div>
+                                    <div>✳️ 100 LVL ✳️</div>
+                                  </div>
+                                  <img class="avatar" src="https://icons8.com">`;
+                sidebar.classList.remove('hidden');
+                menuFriends.onclick = null;
+                if(boxCont) boxCont.classList.remove('hidden');
+                if(boxFav) boxFav.classList.remove('hidden');
+                buildGames('row-rec', false); buildGames('row-cont', false); buildGames('row-fav', false);
             }
-            renderPage(window.location.pathname);
         }
 
-        // Генерация игр
-        function generateFeniGames(containerId, isGuestFullList) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            container.innerHTML = '';
-
-            const gamesList = [
-                { id: "battle_arena_3d", title: "Битва Арена 3D", icon: "⚔️" },
-                { id: "lucky_block_race", title: "Лаки Блок Гонки", icon: "❓" },
-                { id: "escape_doors", title: "Отель DOORS", icon: "🚪" },
-                { id: "phoenix_boss_raid", title: "Рейд на Феникса", icon: "🔥" }
-            ];
-
-            const finalGames = isGuestFullList ? [...gamesList, ...gamesList, ...gamesList].slice(0, 12) : gamesList;
-
-            finalGames.forEach(game => {
-                const slot = document.createElement('div');
-                slot.className = 'game-slot';
-                slot.style.flexDirection = 'column';
-                slot.style.gap = '5px';
-                
-                const iconEl = document.createElement('div');
-                iconEl.style.fontSize = '1.8rem';
-                iconEl.innerText = game.icon;
-
-                const titleEl = document.createElement('div');
-                titleEl.style.fontSize = '0.65rem';
-                titleEl.style.textAlign = 'center';
-                titleEl.style.padding = '0 5px';
-                titleEl.innerText = game.title;
-
-                slot.appendChild(iconEl);
-                slot.appendChild(titleEl);
-
-                slot.onclick = () => navigateTo('/game/' + game.id);
-                container.appendChild(slot);
+        function buildGames(id, full) {
+            const box = document.getElementById(id);
+            if (!box) return; box.innerHTML = '';
+            const list = full ? [...games, ...games, ...games].slice(0, 12) : games;
+            list.forEach(g => {
+                const el = document.createElement('div'); el.className = 'slot';
+                el.innerHTML = `<div style="font-size:1.8rem">${g.icon}</div><div style="padding:0 5px">${g.title}</div>`;
+                el.onclick = () => alert('Запуск игры: ' + g.title);
+                box.appendChild(el);
             });
         }
 
-        window.onpopstate = function() { renderPage(window.location.pathname); };
-        window.onload = function() { changeAuthMode('user'); }
+        window.onload = () => setMode('user');
+    </script>
+</body>
+</html>
