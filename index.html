@@ -3,91 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FeniBlox — Онлайн Песочница</title>
+    <title>FeniBlox — Официальный сайт</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0d1117; /* Глубокий темно-синий/серый цвет как на GitHub */
+            color: #c9d1d9;
             text-align: center;
-            padding: 50px 20px;
+            padding: 60px 20px;
             margin: 0;
         }
         h1 {
-            color: #ff6600;
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+            color: #58a6ff; /* Стильный неоново-голубой цвет */
+            font-size: 3.8rem;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
         }
         .subtitle {
-            color: #aaaaaa;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
+            color: #8b949e;
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            font-weight: 300;
         }
-        .card {
-            background-color: #1e1e1e;
+        .main-card {
+            background-color: #161b22;
             padding: 40px;
-            border-radius: 15px;
+            border-radius: 12px;
             display: inline-block;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #333;
-            max-width: 500px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            border: 1px solid #30363d;
+            max-width: 550px;
+            text-align: left;
         }
-        .online-box {
-            background-color: #252525;
+        .main-card h2 {
+            color: #f0f6fc;
+            margin-top: 0;
+            font-size: 1.8rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+        .main-card p {
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+        .status-box {
+            background-color: #0d1117;
             padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 5px solid #00ff66;
-            font-size: 1.1rem;
+            border-radius: 6px;
+            margin: 25px 0;
+            border-left: 4px solid #58a6ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        #online-count {
+        .status-title {
             font-weight: bold;
-            color: #00ff66;
+            color: #f0f6fc;
         }
-        .btn {
-            background-color: #ff6600;
-            color: white;
-            padding: 12px 30px;
+        .online-status {
+            color: #58a6ff;
+            font-weight: bold;
+        }
+        .btn-download {
+            background-color: #21262d;
+            color: #c9d1d9;
+            padding: 14px 28px;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 6px;
+            font-weight: 600;
             font-size: 1.1rem;
-            display: inline-block;
-            transition: 0.2s;
-            margin-top: 10px;
+            display: block;
+            text-align: center;
+            border: 1px solid #f0f6fc;
+            transition: 0.2s ease;
+            margin-top: 15px;
         }
-        .btn:hover {
-            background-color: #e65500;
-            transform: scale(1.05);
+        .btn-download:hover {
+            background-color: #58a6ff;
+            color: #0d1117;
+            border-color: #58a6ff;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-    <h1>FeniBlox 1.0</h1>
-    <div class="subtitle">Микс Roblox + KoGaMa от Phoenix123-rus</div>
+    <h1>FeniBlox</h1>
+    <div class="subtitle">Разработчик: Phoenix123-rus</div>
 
-    <div class="card">
-        <h2>Проект в разработке</h2>
-        <p>Добро пожаловать! FeniBlox — это новая независимая онлайн-песочница на движке Defold (Lua).</p>
+    <div class="main-card">
+        <h2>Официальный запуск проекта</h2>
+        <p>Добро пожаловать на главную страницу FeniBlox. Это полностью независимая игровая онлайн-песочница, создаваемая с нуля на движке Defold.</p>
+        <p>В основе проекта лежит полная свобода действий, программирование логики на Lua и создание собственных уникальных миров.</p>
         
-        <!-- Наш будущий блок онлайна -->
-        <div class="online-box">
-            Сейчас в игре: <span id="online-count">Загрузка...</span> игроков
+        <div class="status-box">
+            <span class="status-title">Статус серверов FeniBlox:</span>
+            <span class="online-status">Разработка (0 онлайн)</span>
         </div>
 
-        <a href="#" class="btn">Скачать Версию 1.0 (Скоро)</a>
+        <a href="#" class="btn-download">Скачать клиент (Версия 1.0 Alpha)</a>
     </div>
-
-    <script>
-        // Этот скрипт в будущем будет брать реальный онлайн с твоего Serv00 сервера
-        // Пока сервера нет, мы временно поставим симуляцию, чтобы сайт выглядел живым
-        function updateFakeOnline() {
-            document.getElementById('online-count').innerText = "0"; // Пока 0, так как мы только строим
-        }
-        window.onload = updateFakeOnline;
-    </script>
 
 </body>
 </html>
