@@ -6,14 +6,12 @@
     <title>FeniBlox</title>
     <style>
         body { background: #1a1b1e; color: #0ed145; font-family: 'Segoe Script', cursive, sans-serif; margin: 0; user-select: none; }
-        .switcher { position: fixed; bottom: 20px; left: 20px; background: #2a2b30; padding: 10px; border: 2px solid #0ed145; border-radius: 5px; z-index: 1000; }
-        .switcher button { background: #0ed145; border: none; padding: 5px 10px; cursor: pointer; font-family: 'Segoe Script'; font-weight: bold; }
         header { background: #111215; border-bottom: 2px solid #2d2e33; display: flex; justify-content: space-between; align-items: center; height: 60px; padding: 0 20px; }
         .nav { display: flex; align-items: center; gap: 20px; }
         .logo { font-size: 1.6rem; font-weight: bold; }
         .nav-item { cursor: pointer; font-size: 1.2rem; }
         .auth { display: flex; align-items: center; gap: 12px; }
-        .btn { background: transparent; border: 2px solid #0ed145; color: #0ed145; font-family: 'Segoe Script'; padding: 5px 15px; border-radius: 5px; cursor: pointer; }
+        .btn { background: transparent; border: 2px solid #0ed145; color: #0ed145; font-family: 'Segoe Script'; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .btn:hover { background: #0ed145; color: #1a1b1e; }
         .avatar { width: 44px; height: 44px; border: 2px solid #0ed145; border-radius: 5px; }
         .main { display: flex; min-height: calc(100vh - 62px); }
@@ -27,24 +25,24 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 2000; }
         .win { background: #111215; border: 2px solid #0ed145; border-radius: 15px; width: 350px; padding: 30px; text-align: center; position: relative; }
         .close { position: absolute; top: 10px; right: 15px; font-size: 1.5rem; cursor: pointer; }
-        .input { width: 90%; background: #222429; border: 2px solid #3a3c43; padding: 10px; color: #fff; font-family: 'Segoe Script'; margin-bottom: 15px; outline: none; }
-        .hidden { display: none !important; }
+        .btn-google { background: #fff; color: #000; border: none; padding: 10px; width: 100%; font-family: sans-serif; font-weight: bold; border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
+        .btn-google:hover { background: #e6e6e6; }
     </style>
 </head>
 <body>
-
-    <div class="switcher">
-        Режим: <button onclick="setMode('guest')">Гость</button> <button onclick="setMode('user')">Вошёл</button>
-    </div>
 
     <header>
         <div class="nav">
             <div class="logo">FeniBlox</div>
             <div class="nav-item">🎮 Игры</div>
-            <div class="nav-item" id="menu-friends">👥 Друзья</div>
+            <div class="nav-item">👥 Друзья</div>
             <div class="nav-item">💬 Форум</div>
         </div>
-        <div class="auth" id="auth-zone"></div>
+        <div class="auth" id="auth-zone">
+            <!-- Кнопки входа изменятся после логина -->
+            <button class="btn" onclick="openModal(true,'🔑 Вход через Google')">Войти</button>
+            <button class="btn" onclick="openModal(true,'🔐 Регистрация')">Регистрация</button>
+        </div>
     </header>
 
     <main class="main">
@@ -54,18 +52,14 @@
             <div class="title">⭐ Рекомендации</div>
             <div class="row" id="row-rec"></div>
 
-            <div id="box-continue">
-                <div class="title">🎮 Продолжить играть</div>
-                <div class="row" id="row-cont"></div>
-            </div>
+            <div class="title">🎮 Продолжить играть</div>
+            <div class="row" id="row-cont"></div>
 
-            <div id="box-fav">
-                <div class="title">❤️ Избранные игры</div>
-                <div class="row" id="row-fav"></div>
-            </div>
+            <div class="title">❤️ Избранные игры</div>
+            <div class="row" id="row-fav"></div>
         </section>
 
-        <aside id="sidebar">
+        <aside>
             <p>Список друзей</p>
             <div style="margin-top:40px; font-size:1.4rem;">✳️ ТУТ СПИСОК ДРУЗЕЙ ✳️</div>
         </aside>
@@ -75,9 +69,13 @@
         <div class="win">
             <span class="close" onclick="openModal(false)">&times;</span>
             <h3 id="m-title">Вход</h3>
-            <input type="text" class="input" placeholder="Ваш ник...">
-            <input type="password" class="input" placeholder="Пароль...">
-            <button class="btn" style="width:100%" onclick="openModal(false)">Готово</button>
+            <p style="font-size:0.85rem; color:#8b949e;">Быстрый доступ к платформе FeniBlox</p>
+            
+            <!-- Кнопка авторизации через Google -->
+            <button class="btn-google" onclick="loginWithGoogle()">
+                <img src="https://icons8.com" alt="G"> 
+                Войти через Google
+            </button>
         </div>
     </div>
 
@@ -92,40 +90,27 @@
             document.getElementById('myModal').style.display = show ? 'flex' : 'none';
         }
 
-        function setMode(mode) {
+        // Функция симуляции Google API
+        function loginWithGoogle() {
+            openModal(false);
+            alert("FeniBlox API: Подключение к серверам Google...");
+            
+            // После успешного ответа Google API переключаем шапку на твой админский профиль
             const auth = document.getElementById('auth-zone');
-            const sidebar = document.getElementById('sidebar');
-            const menuFriends = document.getElementById('menu-friends');
-            const boxCont = document.getElementById('box-continue');
-            const boxFav = document.getElementById('box-favorites');
-
-            if (mode === 'guest') {
-                auth.innerHTML = `<button class="btn" onclick="openModal(true,'🔑 Вход')">Войти</button>
-                                  <button class="btn" onclick="openModal(true,'🔐 Регистрация')">Регистрация</button>`;
-                sidebar.classList.add('hidden');
-                menuFriends.onclick = () => openModal(true, '🔐 Регистрация');
-                if(boxCont) boxCont.classList.add('hidden');
-                if(boxFav) boxFav.classList.add('hidden');
-                buildGames('row-rec', true);
-            } else {
-                auth.innerHTML = `<div style="text-align:right; font-size:0.9rem;">
-                                    <div style="color:#fff;">✳️ FeniBlox ✳️</div>
-                                    <div>✳️ 100 LVL ✳️</div>
-                                  </div>
-                                  <img class="avatar" src="https://icons8.com">`;
-                sidebar.classList.remove('hidden');
-                menuFriends.onclick = null;
-                if(boxCont) boxCont.classList.remove('hidden');
-                if(boxFav) boxFav.classList.remove('hidden');
-                buildGames('row-rec', false); buildGames('row-cont', false); buildGames('row-fav', false);
-            }
+            auth.innerHTML = `
+                <div style="text-align:right; font-size:0.9rem;">
+                    <div style="color:#fff;">✳️ FeniBlox ✳️</div>
+                    <div style="color:#0ed145;">✳️ 100 LVL ✳️</div>
+                </div>
+                <img class="avatar" src="https://icons8.com">
+            `;
+            alert("Добро пожаловать, FeniBlox! Вы успешно вошли через Google.");
         }
 
-        function buildGames(id, full) {
+        function buildGames(id) {
             const box = document.getElementById(id);
             if (!box) return; box.innerHTML = '';
-            const list = full ? [...games, ...games, ...games].slice(0, 12) : games;
-            list.forEach(g => {
+            games.forEach(g => {
                 const el = document.createElement('div'); el.className = 'slot';
                 el.innerHTML = `<div style="font-size:1.8rem">${g.icon}</div><div style="padding:0 5px">${g.title}</div>`;
                 el.onclick = () => alert('Запуск игры: ' + g.title);
@@ -133,7 +118,11 @@
             });
         }
 
-        window.onload = () => setMode('user');
+        window.onload = () => {
+            buildGames('row-rec'); 
+            buildGames('row-cont'); 
+            buildGames('row-fav');
+        }
     </script>
 </body>
 </html>
