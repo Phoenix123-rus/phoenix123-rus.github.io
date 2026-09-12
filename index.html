@@ -3,191 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FeniBlox — Игровая Онлайн Платформа</title>
+    <title>FeniBlox — Главная</title>
     <style>
+        /* Подключаем базовые настройки стиля по твоему рисунку */
         body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: #1a1b1e; /* Темно-серый фон */
+            color: #0ed145; /* Твой фирменный неоново-салатовый цвет */
+            font-family: 'Segoe Script', 'Comic Sans MS', cursive, sans-serif;
             margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        /* ТЕСТОВАЯ КНОПКА — для проверки режимов */
+        .test-switcher {
+            position: fixed;
+            bottom: 20px; left: 20px;
+            background: #2a2b30; padding: 10px;
+            border: 2px solid #0ed145; border-radius: 5px;
+            z-index: 9999; color: #fff; font-family: sans-serif; font-size: 12px;
+        }
+        .test-switcher button {
+            background: #0ed145; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold;
+            font-family: 'Segoe Script', cursive; color: #1a1b1e; border-radius: 3px; margin-left: 5px;
+        }
+
+        /* ШАПКА САЙТА (ХЕДЕР) */
+        header {
+            background-color: #111215;
+            border-bottom: 2px solid #2d2e33;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            padding: 0 20px;
+        }
+        .nav-links {
+            display: flex;
+            height: 100%;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-right: 30px;
+        }
+        .nav-item {
+            padding: 0 20px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-right: 1px solid #2d2e33;
+            cursor: pointer;
+            text-decoration: none;
+            color: #0ed145;
+            font-size: 1.2rem;
+        }
+        .nav-item:hover {
+            background-color: #222429;
+        }
+
+        /* ПАНЕЛЬ ПРОФИЛЯ / ВХОДА */
+        .auth-panel {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            height: 100%;
+        }
+        /* Стили для кнопок Войти / Рег */
+        .btn-auth {
+            background: transparent;
+            border: 2px solid #0ed145;
+            color: #0ed145;
+            font-family: 'Segoe Script', cursive;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+        .btn-auth:hover {
+            background: #0ed145;
+            color: #1a1b1e;
+        }
+        /* Стиль аватарки и уровня из твоего рисунка */
+        .user-profile-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+        .user-avatar-img {
+            width: 44px;
+            height: 44px;
+            border: 2px solid #0ed145;
+            border-radius: 5px;
+            background: #111215;
+        }
+
+        /* ОСНОВНОЙ КОНТЕНТ */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 62px);
+        }
+        
+        /* ИГРОВАЯ ЗОНА (ЛЕВАЯ ЧАСТЬ) */
+        .games-section {
+            flex: 1;
             padding: 20px;
-            text-align: center;
+            box-sizing: border-box;
         }
-        h1 {
-            color: #58a6ff;
-            font-size: 3rem;
-            margin-bottom: 5px;
-            text-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
+        
+        /* ПОИСКОВАЯ СТРОКА */
+        .search-container {
+            margin-bottom: 25px;
         }
-        .user-panel {
-            background: #161b22;
-            padding: 10px 20px;
-            border-radius: 8px;
-            display: inline-block;
-            border: 1px solid #30363d;
+        .search-bar {
+            width: 100%;
+            max-width: 700px;
+            background-color: #222429;
+            border: 2px solid #3a3c43;
+            padding: 10px;
+            color: #0ed145;
+            font-family: 'Segoe Script', cursive;
+            font-size: 0.9rem;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        /* КАТЕГОРИИ ИГР */
+        .category-title {
+            font-size: 1.3rem;
+            margin: 20px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .games-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
             margin-bottom: 30px;
         }
-        .user-name { color: #58a6ff; font-weight: bold; }
-        .user-coins { color: #ffcc00; font-weight: bold; }
-
-        /* Сетка игр (2D Рекомендации) */
-        .games-grid {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .game-card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 10px;
-            width: 220px;
-            cursor: pointer;
-            transition: 0.2s;
-            overflow: hidden;
-        }
-        .game-card:hover {
-            transform: translateY(-5px);
-            border-color: #58a6ff;
-        }
-        .game-thumb {
-            background: linear-gradient(45deg, #1f2937, #3b82f6);
-            height: 140px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-        .game-title {
-            padding: 15px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            text-align: left;
-        }
-
-        /* Модальное всплывающее окно */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-        .modal-window {
-            background: #161b22;
-            border: 1px solid #30363d;
+        /* Зеленые квадраты из твоего рисунка */
+        .game-slot {
+            width: 110px;
+            height: 110px;
+            border: 2px solid #0ed145;
             border-radius: 12px;
-            width: 500px;
-            padding: 30px;
-            text-align: left;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .close-btn {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 1.5rem;
             cursor: pointer;
-            color: #8b949e;
-        }
-        .close-btn:hover { color: #fff; }
-        .modal-title { color: #f0f6fc; font-size: 1.8rem; margin-top: 0; }
-        .modal-desc { line-height: 1.6; color: #8b949e; margin: 15px 0; }
-        
-        .btn-play {
-            background-color: #238636;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
             transition: 0.2s;
+            background-color: transparent;
+        }
+        .game-slot:hover {
+            transform: scale(1.05);
+            background-color: rgba(14, 209, 69, 0.1);
+            box-shadow: 0 0 10px rgba(14, 209, 69, 0.3);
+        }
+
+        /* БОКОВАЯ ПАНЕЛЬ ДРУЗЕЙ (ПРАВАЯ ЧАСТЬ) */
+        aside {
+            width: 250px;
+            border-left: 2px solid #2d2e33;
+            background-color: #141518;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .aside-title {
+            font-size: 1.1rem;
+            border-bottom: 1px solid #2d2e33;
+            padding-bottom: 10px;
+            margin-top: 0;
             text-align: center;
         }
-        .btn-play:hover { background-color: #2ea44f; }
-
-        /* Контейнер для запущенной игры */
-        #game-runtime-container {
-            display: none;
-            width: 100%; max-width: 960px; height: 540px;
-            background: #000; margin: 20px auto;
-            border-radius: 10px; border: 2px solid #58a6ff;
-            overflow: hidden;
+        .friends-placeholder {
+            margin-top: 40px;
+            font-size: 1.4rem;
+            text-align: center;
+            line-height: 1.6;
         }
-        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Анимация скрытия элементов */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 
-    <h1>FeniBlox</h1>
-    <div class="user-panel">
-        Привет, <span class="user-name">FeniBlox</span> | Твой баланс: <span class="user-coins">100 FeniCoins 🪙</span>
+    <!-- ТЕСТОВЫЙ ПЕРЕКЛЮЧАТЕЛЬ ДЛЯ ТЕБЯ -->
+    <div class="test-switcher">
+        Режим: 
+        <button onclick="setMode('guest')">Гость</button> 
+        <button onclick="setMode('user')">Вошёл</button>
     </div>
 
-    <!-- Область запущенной игры -->
-    <div id="game-runtime-container">
-        <iframe id="game-frame" src=""></iframe>
-    </div>
-
-    <h2>Рекомендованные игры</h2>
-    <div class="games-grid">
-        <!-- Карточка Игры 1 -->
-        <div class="game-card" onclick="openGameModal('Битва Арена 3D', 'Эпический 3D-экшен! Сражайся против опасных ботов или устраивай PvP-битвы с реальными игроками по сети. Зарабатывай FeniCoins за каждого поверженного врага!')">
-            <div class="game-thumb">⚔️</div>
-            <div class="game-title">Битва Арена 3D</div>
+    <!-- ШАПКА -->
+    <header>
+        <div class="nav-links">
+            <div class="logo">FeniBlox</div>
+            <a class="nav-item">🎮 Игры</a>
+            <a class="nav-item" id="nav-friends-link">👥 Друзья</a>
+            <a class="nav-item">💬 Форум</a>
         </div>
-
-        <!-- Карточка Игры 2 -->
-        <div class="game-card" onclick="openGameModal('Лаки Блок Гонки', 'Проверь свою удачу на безумной трассе! Ломай желтые лаки-блоки, получай супер-оружие или ловушки на голову. Кто первый доберется до финиша?')">
-            <div class="game-thumb">❓</div>
-            <div class="game-title">Лаки Блок Гонки</div>
+        
+        <!-- Блок авторизации (Кнопки или Ава с ником) -->
+        <div class="auth-panel" id="auth-zone">
+            <!-- Сюда скрипт вставляет контент в зависимости от режима -->
         </div>
-    </div>
+    </header>
 
-    <!-- Всплывающее Окно (Превью игры) -->
-    <div class="modal-overlay" id="gameModal" onclick="closeGameModal(event)">
-        <div class="modal-window" onclick="event.stopPropagation()">
-            <span class="close-btn" onclick="document.getElementById('gameModal').style.display='none'">&times;</span>
-            <h2 class="modal-title" id="modalTitle">Название Игры</h2>
-            <p class="modal-desc" id="modalDesc">Описание игры...</p>
-            <button class="btn-play" onclick="startGame()">ИГРАТЬ 🎮</button>
-        </div>
-    </div>
+    <!-- ОСНОВНАЯ СЕТКА -->
+    <main class="main-layout">
+        
+        <!-- ЛЕВАЯ ЧАСТЬ: ИГРЫ -->
+        <section class="games-section">
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Нажмите сюда чтобы начать поиск игр..." readonly>
+            </div>
+
+            <!-- РЕКОМЕНДАЦИИ -->
+            <div class="category-title">⭐ Рекомендации</div>
+            <div class="games-row" id="row-recommendations">
+                <!-- Квадраты генерируются автоматически -->
+            </div>
+
+            <!-- ПРОДОЛЖИТЬ ИГРАТЬ -->
+            <div id="block-continue">
+                <div class="category-title">🎮 Продолжить играть</div>
+                <div class="games-row">
+                    <div class="game-slot"></div><div class="game-slot"></div><div class="game-slot"></div>
+                    <div class="game-slot"></div><div class="game-slot"></div><div class="game-slot"></div>
+                </div>
+            </div>
+
+            <!-- ИЗБРАННЫЕ ИГРЫ -->
+            <div id="block-favorites">
+                <div class="category-title">❤️ Избранные игры</div>
+                <div class="games-row">
+                    <div class="game-slot"></div><div class="game-slot"></div><div class="game-slot"></div>
+                    <div class="game-slot"></div><div class="game-slot"></div><div class="game-slot"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ПРАВАЯ ЧАСТЬ: ДРУЗЬЯ -->
+        <aside id="sidebar-friends">
+            <p class="aside-title">Список друзей</p>
+            <div class="friends-placeholder">
+                ✳️ ТУТ СПИСОК ДРУЗЕЙ ✳️
+            </div>
+        </aside>
+
+    </main>
 
     <script>
-        function openGameModal(title, desc) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalDesc').innerText = desc;
-            document.getElementById('gameModal').style.display = 'flex';
-        }
+        function setMode(mode) {
+            const authZone = document.getElementById('auth-zone');
+            const navFriends = document.getElementById('nav-friends-link');
+            const blockContinue = document.getElementById('block-continue');
+            const blockFavorites = document.getElementById('block-favorites');
+            const sidebarFriends = document.getElementById('sidebar-friends');
+            const recRow = document.getElementById('row-recommendations');
 
-        function closeGameModal(event) {
-            if(event.target.classList.contains('modal-overlay')) {
-                document.getElementById('gameModal').style.display = 'none';
-            }
-        }
+            if (mode === 'guest') {
+                // РЕЖИМ ГОСТЯ:
+                authZone.innerHTML = `
+                    <button class="btn-auth">Войти</button>
+                    <button class="btn-auth">Регистрация</button>
+                `;
+                navFriends.classList.add('hidden');
+                sidebarFriends.classList.add('hidden');
+                blockContinue.classList.add('hidden');
+                blockFavorites.classList.add('hidden');
+                
+                // Для гостя расширяем рекомендации до 12 слотов
+                generateSlots(recRow, 12);
+            } else {
+                // РЕЖИМ АВТОРИЗОВАННОГО ПОЛЬЗОВАТЕЛЯ (Твой профиль):
+                authZone.innerHTML = `
+                    <div class="user-profile-box">
+                        <div style="color: #666; font-size: 0.8rem;">[Создатель]</div>
+                        <div style="color: #fff;">✳️ FeniBlox ✳️</div>
+                        <div style="color: #0ed145;">✳️ 100 LVL ✳️</div>
+                    </div>
+                    <img class="user-avatar-img" src="https://icons8.com" alt="Ава">
+                `;
+                navFriends.classList.remove('hidden');
+                sidebarFriends.classList.remove('hidden');
+                blockContinue.classList.remove('hidden');
+                blockFavorites.classList.remove('hidden');
+        // Обычные рекомендации (6 квадратов по рисунку)
+        generateSlots(recRow, 6);
+    }
+}
 
-        function startGame() {
-            // Закрываем окошко
-            document.getElementById('gameModal').style.display = 'none';
-            // Показываем контейнер с игрой
-            document.getElementById('game-runtime-container').style.display = 'block';
-            
-            // Сюда в будущем встанет ссылка на твою HTML5 сборку из Defold
-            // А пока загрузим временную демо-заглушку, чтобы проверить кнопку
-            document.getElementById('game-frame').src = "about:blank"; 
-            
-            // Скроллим экран к запущенной игре
-            document.getElementById('game-runtime-container').scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
+// Функция для генерации пустых зеленых квадратов игр
+function generateSlots(container, count) {
+    container.innerHTML = '';
+    for(let i = 0; i < count; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'game-slot';
+        container.appendChild(slot);
+    }
+}
 
-</body>
-</html>
+// Запуск сайта по умолчанию в режиме создателя
+window.onload = function() {
+    setMode('user');
+}
