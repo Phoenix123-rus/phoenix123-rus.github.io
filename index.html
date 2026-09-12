@@ -3,107 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FeniBlox — Официальный сайт</title>
+    <title>FeniBlox — Игровая Онлайн Платформа</title>
     <style>
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #0d1117; /* Глубокий темно-синий/серый цвет как на GitHub */
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: #0d1117;
             color: #c9d1d9;
-            text-align: center;
-            padding: 60px 20px;
             margin: 0;
+            padding: 20px;
+            text-align: center;
         }
         h1 {
-            color: #58a6ff; /* Стильный неоново-голубой цвет */
-            font-size: 3.8rem;
+            color: #58a6ff;
+            font-size: 3rem;
             margin-bottom: 5px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(88, 166, 255, 0.3);
+            text-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
         }
-        .subtitle {
-            color: #8b949e;
-            font-size: 1.3rem;
-            margin-bottom: 40px;
-            font-weight: 300;
-        }
-        .main-card {
-            background-color: #161b22;
-            padding: 40px;
-            border-radius: 12px;
+        .user-panel {
+            background: #161b22;
+            padding: 10px 20px;
+            border-radius: 8px;
             display: inline-block;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
             border: 1px solid #30363d;
-            max-width: 550px;
+            margin-bottom: 30px;
+        }
+        .user-name { color: #58a6ff; font-weight: bold; }
+        .user-coins { color: #ffcc00; font-weight: bold; }
+
+        /* Сетка игр (2D Рекомендации) */
+        .games-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .game-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            width: 220px;
+            cursor: pointer;
+            transition: 0.2s;
+            overflow: hidden;
+        }
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #58a6ff;
+        }
+        .game-thumb {
+            background: linear-gradient(45deg, #1f2937, #3b82f6);
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .game-title {
+            padding: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
             text-align: left;
         }
-        .main-card h2 {
-            color: #f0f6fc;
-            margin-top: 0;
-            font-size: 1.8rem;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 10px;
-        }
-        .main-card p {
-            line-height: 1.6;
-            font-size: 1.05rem;
-        }
-        .status-box {
-            background-color: #0d1117;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 25px 0;
-            border-left: 4px solid #58a6ff;
-            display: flex;
-            justify-content: space-between;
+
+        /* Модальное всплывающее окно */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
             align-items: center;
+            z-index: 100;
         }
-        .status-title {
-            font-weight: bold;
-            color: #f0f6fc;
+        .modal-window {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            width: 500px;
+            padding: 30px;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .online-status {
-            color: #58a6ff;
-            font-weight: bold;
-        }
-        .btn-download {
-            background-color: #21262d;
-            color: #c9d1d9;
-            padding: 14px 28px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            display: block;
-            text-align: center;
-            border: 1px solid #f0f6fc;
-            transition: 0.2s ease;
-            margin-top: 15px;
-        }
-        .btn-download:hover {
-            background-color: #58a6ff;
-            color: #0d1117;
-            border-color: #58a6ff;
+        .close-btn {
+            position: absolute;
+            top: 15px; right: 20px;
+            font-size: 1.5rem;
             cursor: pointer;
+            color: #8b949e;
         }
+        .close-btn:hover { color: #fff; }
+        .modal-title { color: #f0f6fc; font-size: 1.8rem; margin-top: 0; }
+        .modal-desc { line-height: 1.6; color: #8b949e; margin: 15px 0; }
+        
+        .btn-play {
+            background-color: #238636;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .btn-play:hover { background-color: #2ea44f; }
+
+        /* Контейнер для запущенной игры */
+        #game-runtime-container {
+            display: none;
+            width: 100%; max-width: 960px; height: 540px;
+            background: #000; margin: 20px auto;
+            border-radius: 10px; border: 2px solid #58a6ff;
+            overflow: hidden;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
     <h1>FeniBlox</h1>
-    <div class="subtitle">Разработчик: Phoenix123-rus</div>
+    <div class="user-panel">
+        Привет, <span class="user-name">FeniBlox</span> | Твой баланс: <span class="user-coins">100 FeniCoins 🪙</span>
+    </div>
 
-    <div class="main-card">
-        <h2>Официальный запуск проекта</h2>
-        <p>Добро пожаловать на главную страницу FeniBlox. Это полностью независимая игровая онлайн-песочница, создаваемая с нуля на движке Defold.</p>
-        <p>В основе проекта лежит полная свобода действий, программирование логики на Lua и создание собственных уникальных миров.</p>
-        
-        <div class="status-box">
-            <span class="status-title">Статус серверов FeniBlox:</span>
-            <span class="online-status">Разработка (0 онлайн)</span>
+    <!-- Область запущенной игры -->
+    <div id="game-runtime-container">
+        <iframe id="game-frame" src=""></iframe>
+    </div>
+
+    <h2>Рекомендованные игры</h2>
+    <div class="games-grid">
+        <!-- Карточка Игры 1 -->
+        <div class="game-card" onclick="openGameModal('Битва Арена 3D', 'Эпический 3D-экшен! Сражайся против опасных ботов или устраивай PvP-битвы с реальными игроками по сети. Зарабатывай FeniCoins за каждого поверженного врага!')">
+            <div class="game-thumb">⚔️</div>
+            <div class="game-title">Битва Арена 3D</div>
         </div>
 
-        <a href="#" class="btn-download">Скачать клиент (Версия 1.0 Alpha)</a>
+        <!-- Карточка Игры 2 -->
+        <div class="game-card" onclick="openGameModal('Лаки Блок Гонки', 'Проверь свою удачу на безумной трассе! Ломай желтые лаки-блоки, получай супер-оружие или ловушки на голову. Кто первый доберется до финиша?')">
+            <div class="game-thumb">❓</div>
+            <div class="game-title">Лаки Блок Гонки</div>
+        </div>
     </div>
+
+    <!-- Всплывающее Окно (Превью игры) -->
+    <div class="modal-overlay" id="gameModal" onclick="closeGameModal(event)">
+        <div class="modal-window" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="document.getElementById('gameModal').style.display='none'">&times;</span>
+            <h2 class="modal-title" id="modalTitle">Название Игры</h2>
+            <p class="modal-desc" id="modalDesc">Описание игры...</p>
+            <button class="btn-play" onclick="startGame()">ИГРАТЬ 🎮</button>
+        </div>
+    </div>
+
+    <script>
+        function openGameModal(title, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('gameModal').style.display = 'flex';
+        }
+
+        function closeGameModal(event) {
+            if(event.target.classList.contains('modal-overlay')) {
+                document.getElementById('gameModal').style.display = 'none';
+            }
+        }
+
+        function startGame() {
+            // Закрываем окошко
+            document.getElementById('gameModal').style.display = 'none';
+            // Показываем контейнер с игрой
+            document.getElementById('game-runtime-container').style.display = 'block';
+            
+            // Сюда в будущем встанет ссылка на твою HTML5 сборку из Defold
+            // А пока загрузим временную демо-заглушку, чтобы проверить кнопку
+            document.getElementById('game-frame').src = "about:blank"; 
+            
+            // Скроллим экран к запущенной игре
+            document.getElementById('game-runtime-container').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
 
 </body>
 </html>
